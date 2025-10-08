@@ -1,0 +1,272 @@
+{
+  "collections": [
+    {
+      "sql_table": "users",
+      "nosql_collection": "users",
+      "document_structure": {
+        "_id": "ObjectId (auto-generated)",
+        "metadata": {
+          "created_at": "timestamp",
+          "updated_at": "timestamp",
+          "version": "number"
+        },
+        "username": {
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "indexed": true
+        },
+        "email": {
+          "type": "string",
+          "required": true,
+          "unique": true,
+          "indexed": true
+        },
+        "first_name": {
+          "type": "string",
+          "required": true
+        },
+        "last_name": {
+          "type": "string",
+          "required": true
+        },
+        "created_at": {
+          "type": "timestamp",
+          "required": true
+        },
+        "updated_at": {
+          "type": "timestamp",
+          "required": false
+        }
+      },
+      "embedding_strategy": "reference",
+      "primary_key_mapping": {
+        "sql_column": "id",
+        "nosql_field": "_id",
+        "type": "ObjectId"
+      },
+      "field_mappings": [
+        {
+          "sql_column": "username",
+          "nosql_field": "username",
+          "type": "string",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "email",
+          "nosql_field": "email",
+          "type": "string",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "first_name",
+          "nosql_field": "first_name",
+          "type": "string",
+          "required": true,
+          "indexed": false
+        },
+        {
+          "sql_column": "last_name",
+          "nosql_field": "last_name",
+          "type": "string",
+          "required": true,
+          "indexed": false
+        },
+        {
+          "sql_column": "created_at",
+          "nosql_field": "created_at",
+          "type": "timestamp",
+          "required": true,
+          "indexed": false
+        },
+        {
+          "sql_column": "updated_at",
+          "nosql_field": "updated_at",
+          "type": "timestamp",
+          "required": false,
+          "indexed": false
+        }
+      ],
+      "relationships": []
+    },
+    {
+      "sql_table": "products",
+      "nosql_collection": "products",
+      "document_structure": {
+        "_id": "ObjectId (auto-generated)",
+        "metadata": {
+          "created_at": "timestamp",
+          "updated_at": "timestamp",
+          "version": "number"
+        },
+        "name": {
+          "type": "string",
+          "required": true,
+          "indexed": true
+        },
+        "description": {
+          "type": "string",
+          "required": false
+        },
+        "price": {
+          "type": "decimal128",
+          "required": true,
+          "indexed": true
+        },
+        "category_id": {
+          "type": "ObjectId",
+          "required": true,
+          "indexed": true
+        },
+        "stock_quantity": {
+          "type": "int32",
+          "required": true,
+          "indexed": true
+        },
+        "created_at": {
+          "type": "timestamp",
+          "required": true
+        }
+      },
+      "embedding_strategy": "reference",
+      "primary_key_mapping": {
+        "sql_column": "id",
+        "nosql_field": "_id",
+        "type": "ObjectId"
+      },
+      "field_mappings": [
+        {
+          "sql_column": "name",
+          "nosql_field": "name",
+          "type": "string",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "description",
+          "nosql_field": "description",
+          "type": "string",
+          "required": false,
+          "indexed": false
+        },
+        {
+          "sql_column": "price",
+          "nosql_field": "price",
+          "type": "decimal128",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "category_id",
+          "nosql_field": "category_id",
+          "type": "ObjectId",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "stock_quantity",
+          "nosql_field": "stock_quantity",
+          "type": "int32",
+          "required": true,
+          "indexed": true
+        },
+        {
+          "sql_column": "created_at",
+          "nosql_field": "created_at",
+          "type": "timestamp",
+          "required": true,
+          "indexed": false
+        }
+      ],
+      "relationships": [
+        {
+          "from_table": "products",
+          "to_table": "categories",
+          "relationship_type": "many_to_one",
+          "description": "Product belongs to category"
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from_collection": "products",
+      "to_collection": "categories",
+      "relationship_type": "many_to_one",
+      "strategy": "reference",
+      "implementation": {
+        "type": "reference",
+        "description": "Store reference to categories in products",
+        "field_name": "category_id"
+      }
+    }
+  ],
+  "indexes": [
+    {
+      "collection": "users",
+      "index": {
+        "_id": 1
+      },
+      "type": "unique",
+      "description": "Primary key index"
+    },
+    {
+      "collection": "users",
+      "index": {
+        "username": 1
+      },
+      "type": "unique",
+      "description": "Index on username"
+    },
+    {
+      "collection": "users",
+      "index": {
+        "email": 1
+      },
+      "type": "unique",
+      "description": "Index on email"
+    },
+    {
+      "collection": "products",
+      "index": {
+        "_id": 1
+      },
+      "type": "unique",
+      "description": "Primary key index"
+    },
+    {
+      "collection": "products",
+      "index": {
+        "name": 1
+      },
+      "type": "regular",
+      "description": "Index on name"
+    },
+    {
+      "collection": "products",
+      "index": {
+        "price": 1
+      },
+      "type": "regular",
+      "description": "Index on price"
+    }
+  ],
+  "embedding_strategies": [
+    {
+      "parent_collection": "orders",
+      "embedding_opportunities": [
+        {
+          "child_table": "order_items",
+          "child_collection": "order_items",
+          "reason": "Frequently accessed together"
+        }
+      ],
+      "recommendations": [
+        "Embed order items as subdocuments in orders collection",
+        "This will improve query performance for order details"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,259 @@
+{
+  "tables": [
+    {
+      "name": "users",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary_key": true,
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "username",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "email",
+          "type": "VARCHAR(100)",
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "first_name",
+          "type": "VARCHAR(50)",
+          "nullable": false
+        },
+        {
+          "name": "last_name",
+          "type": "VARCHAR(50)",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": false
+        },
+        {
+          "name": "updated_at",
+          "type": "TIMESTAMP",
+          "nullable": true
+        }
+      ]
+    },
+    {
+      "name": "products",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary_key": true,
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(100)",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "price",
+          "type": "DECIMAL(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "category_id",
+          "type": "INT",
+          "nullable": false,
+          "is_foreign_key": true,
+          "references_table": "categories",
+          "references_column": "id"
+        },
+        {
+          "name": "stock_quantity",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "created_at",
+          "type": "TIMESTAMP",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "categories",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary_key": true,
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "name",
+          "type": "VARCHAR(50)",
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "description",
+          "type": "TEXT",
+          "nullable": true
+        },
+        {
+          "name": "parent_id",
+          "type": "INT",
+          "nullable": true,
+          "is_foreign_key": true,
+          "references_table": "categories",
+          "references_column": "id"
+        }
+      ]
+    },
+    {
+      "name": "orders",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary_key": true,
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "user_id",
+          "type": "INT",
+          "nullable": false,
+          "is_foreign_key": true,
+          "references_table": "users",
+          "references_column": "id"
+        },
+        {
+          "name": "order_date",
+          "type": "TIMESTAMP",
+          "nullable": false
+        },
+        {
+          "name": "total_amount",
+          "type": "DECIMAL(10,2)",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "VARCHAR(20)",
+          "nullable": false
+        },
+        {
+          "name": "shipping_address",
+          "type": "TEXT",
+          "nullable": false
+        }
+      ]
+    },
+    {
+      "name": "order_items",
+      "columns": [
+        {
+          "name": "id",
+          "type": "INT",
+          "is_primary_key": true,
+          "nullable": false,
+          "is_unique": true
+        },
+        {
+          "name": "order_id",
+          "type": "INT",
+          "nullable": false,
+          "is_foreign_key": true,
+          "references_table": "orders",
+          "references_column": "id"
+        },
+        {
+          "name": "product_id",
+          "type": "INT",
+          "nullable": false,
+          "is_foreign_key": true,
+          "references_table": "products",
+          "references_column": "id"
+        },
+        {
+          "name": "quantity",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "unit_price",
+          "type": "DECIMAL(10,2)",
+          "nullable": false
+        }
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "from_table": "products",
+      "from_column": "category_id",
+      "to_table": "categories",
+      "to_column": "id",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_table": "categories",
+      "from_column": "parent_id",
+      "to_table": "categories",
+      "to_column": "id",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_table": "orders",
+      "from_column": "user_id",
+      "to_table": "users",
+      "to_column": "id",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_table": "order_items",
+      "from_column": "order_id",
+      "to_table": "orders",
+      "to_column": "id",
+      "relationship_type": "many_to_one"
+    },
+    {
+      "from_table": "order_items",
+      "from_column": "product_id",
+      "to_table": "products",
+      "to_column": "id",
+      "relationship_type": "many_to_one"
+    }
+  ],
+  "migration_complexity": {
+    "level": "Medium",
+    "score": 4,
+    "factors": [
+      "Moderate number of tables",
+      "Complex relationship network"
+    ]
+  },
+  "recommendations": [
+    {
+      "type": "denormalization",
+      "description": "Consider denormalizing frequently accessed related data into single documents",
+      "priority": "high"
+    },
+    {
+      "type": "document_structure",
+      "description": "Consider embedding detail tables as subdocuments in parent collections",
+      "priority": "medium"
+    }
+  ]
+}

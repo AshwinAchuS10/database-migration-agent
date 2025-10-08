@@ -1,0 +1,15 @@
+# Environment Variables for SQL to NoSQL Migration Multi-Agent System
+
+# Google API Configuration
+GOOGLE_API_KEY=your_google_api_key_here
+
+# Database Connection Strings
+SQL_CONNECTION_STRING=sqlite:///example.db
+MONGODB_CONNECTION_STRING=mongodb://localhost:27017/
+
+# Optional: Custom output directory
+# OUTPUT_DIR=migration_outputs
+
+# Optional: Model configuration
+# MODEL_NAME=gemini-1.5-pro
+# TEMPERATURE=0.1
